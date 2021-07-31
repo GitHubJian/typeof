@@ -1,0 +1,30 @@
+{
+    "name": "types",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "test": "jest --coverage=true",
+        "test:update-snapshots": "jest --updateSnapshot",
+        "test:watch": "jest --watchAll"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/GitHubJian/types.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/GitHubJian/types/issues"
+    },
+    "homepage": "https://github.com/GitHubJian/types#readme",
+    "devDependencies": {
+        "babel-jest": "27.0.6",
+        "jest": "27.0.6",
+        "sinon": "11.1.2"
+    }
+}
