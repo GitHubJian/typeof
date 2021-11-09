@@ -31,6 +31,7 @@ exports.isEmpty = function isEmpty(value) {
         return !Object.keys(value).length;
     }
 
+    const hasOwnProperty = Object.prototype.hasOwnProperty;
     for (const key in value) {
         if (hasOwnProperty.call(value, key)) {
             return false;

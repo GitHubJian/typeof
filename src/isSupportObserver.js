@@ -1,3 +1,3 @@
 exports.isSupportObserver = function isSupportObserver() {
-    return !!(window.IntersectionObserver && window.MutationObserver);
+    return 'MutationObserver' in window || 'WebkitMutationObserver' in window;
 };
