@@ -3,6 +3,7 @@ const {noop} = require('./noop');
 
 exports.importScript = function importScript(url, options) {
     options = options || {};
+    const inject = options.inject || 'head';
     const script = document.createElement('script');
     const attrs = options.attrs || {};
 
@@ -25,8 +26,10 @@ exports.importScript = function importScript(url, options) {
         failureCallback && failureCallback(e);
     };
 
-    const head = document.getElementsByTagName('head')[0];
-    head.appendChild(script);
+    const parent = document.getElementsByTagName(
+        inject === 'head' ? 'head' : 'body'
+    )[0];
+    parent.appendChild(script);
 
     return script;
 };
