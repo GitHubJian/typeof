@@ -198,6 +198,15 @@ function stringify(r, g, b, alpha) {
     }
 }
 
+function hex2rgba(hex, alpha) {
+    let r = parseInt('0x' + hex.slice(1, 3));
+    let g = parseInt('0x' + hex.slice(3, 5));
+    let b = parseInt('0x' + hex.slice(5, 7));
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+  
+
 exports.colors = {
     rgb2hex,
     rgba2hex,
@@ -208,4 +217,5 @@ exports.colors = {
     hsl2rgb,
     hsv2rgb,
     stringify,
+    hex2rgba
 };
