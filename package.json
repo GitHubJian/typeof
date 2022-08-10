@@ -9,7 +9,16 @@
     "scripts": {
         "test": "jest --coverage=true",
         "test:update-snapshots": "jest --updateSnapshot",
-        "test:watch": "jest --watchAll"
+        "test:watch": "jest --watchAll",
+        "lint": "npm run lint:js",
+        "lint:fix": "npm run lint:js -- --fix && npm run lint:ts -- --fix && npm run lint:vue -- --fix && npm run lint:css -- --fix",
+        "lint:js": "eslint . --ext .js --config './config/eslint/js.js' --ignore-path './config/eslint/.eslintignore'",
+        "lint:ts": "eslint . --ext .ts --config './config/eslint/ts.js' --ignore-path './config/eslint/.eslintignore'",
+        "lint:vue": "eslint . --ext .vue --config './config/eslint/vue.js' --ignore-path './config/eslint/.eslintignore'",
+        "lint:html": "prettier --config './config/prettier/html.js' --ignore-path './config/prettier/.prettierignore' --write '**/**.{ejs,html}'",
+        "lint:yaml": "prettier --config './config/prettier/yaml.js' --ignore-path './config/prettier/.prettierignore' --write '**/**.yml'",
+        "lint:ng": "prettier --write ./nginx.nginx --plugin=prettier-plugin-nginx",
+        "lint:css": "stylelint **/**.vue **/**.less --config './config/stylelint/css.js' --ignore-path './config/stylelint/.stylelintignore' --formatter verbose"
     },
     "repository": {
         "type": "git",
@@ -25,6 +34,11 @@
     "devDependencies": {
         "babel-jest": "27.0.6",
         "jest": "27.0.6",
-        "sinon": "11.1.2"
+        "sinon": "11.1.2",
+        "@ecomfe/eslint-config": "7.4.0",
+        "prettier": "2.7.1",
+        "eslint": "8.21.0",
+        "stylelint": "14.9.1",
+        "stylelint-order": "5.0.0"
     }
 }

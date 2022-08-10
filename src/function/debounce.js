@@ -1,11 +1,16 @@
-var restArguments = function (func, startIndex) {
+let now =
+    Date.now ||
+    function () {
+        return new Date().getTime();
+    };
+
+function restArguments(func, startIndex) {
     startIndex = startIndex == null ? func.length - 1 : +startIndex;
+
     return function () {
-        var length = Math.max(arguments.length - startIndex, 0);
-
-        var rest = Array(length);
-
-        var index = 0;
+        let length = Math.max(arguments.length - startIndex, 0);
+        let rest = Array(length);
+        let index = 0;
         for (; index < length; index++) {
             rest[index] = arguments[index + startIndex];
         }
@@ -17,48 +22,61 @@ var restArguments = function (func, startIndex) {
             case 2:
                 return func.call(this, arguments[0], arguments[1], rest);
         }
-        var args = Array(startIndex + 1);
+        let args = Array(startIndex + 1);
         for (index = 0; index < startIndex; index++) {
             args[index] = arguments[index];
         }
         args[startIndex] = rest;
         return func.apply(this, args);
     };
-};
+}
 
-var delay = restArguments(function (func, wait, args) {
+let delay = restArguments(function (func, wait, args) {
     return setTimeout(function () {
         return func.apply(null, args);
     }, wait);
-});
+}, 0);
 
-var debounce = function (func, wait, immediate) {
-    var timeout, result;
+exports.debounce = function debounce(func, wait, immediate) {
+    let timeout;
+    let previous;
+    let args;
+    let result;
+    let context;
 
-    var later = function (context, args) {
-        timeout = null;
-        if (args) result = func.apply(context, args);
+    var later = function () {
+        let passed = now() - previous;
+        if (wait > passed) {
+            timeout = setTimeout(later, wait - passed);
+        } else {
+            timeout = null;
+            if (!immediate) {
+                result = func.apply(context, args);
+            }
+            // This check is needed because `func` can recursively invoke `debounced`.
+            if (!timeout) {
+                args = context = null;
+            }
+        }
     };
 
-    var debounced = restArguments(function (args) {
-        if (timeout) clearTimeout(timeout);
-        if (immediate) {
-            var callNow = !timeout;
+    let debounced = restArguments(function (_args) {
+        context = this;
+        args = _args;
+        previous = now();
+        if (!timeout) {
             timeout = setTimeout(later, wait);
-            if (callNow) result = func.apply(this, args);
-        } else {
-            timeout = delay(later, wait, this, args);
+            if (immediate) {
+                result = func.apply(context, args);
+            }
         }
-
         return result;
-    });
+    }, 0);
 
     debounced.cancel = function () {
         clearTimeout(timeout);
-        timeout = null;
+        timeout = args = context = null;
     };
 
     return debounced;
 };
-
-exports.debounce = debounce;

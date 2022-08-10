@@ -1,19 +1,29 @@
-var throttle = function (func, wait, options) {
-    var timeout, context, args, result;
-    var previous = 0;
-    if (!options) options = {};
 
-    var later = function () {
-        previous = options.leading === false ? 0 : Date.now();
+exports.throttle = function throttle(func, wait, options) {
+    let timeout;
+    let context;
+    let args;
+    let result;
+    let previous = 0;
+    if (!options) {
+        options = {};
+    }
+
+    let later = function () {
+        previous = options.leading === false ? 0 : now();
         timeout = null;
         result = func.apply(context, args);
-        if (!timeout) context = args = null;
+        if (!timeout) {
+            context = args = null;
+        }
     };
 
-    var throttled = function () {
-        var now = Date.now();
-        if (!previous && options.leading === false) previous = now;
-        var remaining = wait - (now - previous);
+    let throttled = function () {
+        let _now = now();
+        if (!previous && options.leading === false) {
+            previous = _now;
+        }
+        let remaining = wait - (_now - previous);
         context = this;
         args = arguments;
         if (remaining <= 0 || remaining > wait) {
@@ -21,9 +31,11 @@ var throttle = function (func, wait, options) {
                 clearTimeout(timeout);
                 timeout = null;
             }
-            previous = now;
+            previous = _now;
             result = func.apply(context, args);
-            if (!timeout) context = args = null;
+            if (!timeout) {
+                context = args = null;
+            }
         } else if (!timeout && options.trailing !== false) {
             timeout = setTimeout(later, remaining);
         }
@@ -38,5 +50,3 @@ var throttle = function (func, wait, options) {
 
     return throttled;
 };
-
-exports.throttle = throttle;
